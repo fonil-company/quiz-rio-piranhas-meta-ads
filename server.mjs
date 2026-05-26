@@ -7,7 +7,13 @@ import { fileURLToPath } from "node:url";
 import worker from "./dist/server/index.js";
 
 const rootDir = dirname(fileURLToPath(import.meta.url));
-const port = Number(process.env.PORT || 3000);
+const port = Number(
+  process.env.PORT ||
+    process.env.NIXPACKS_PORT ||
+    process.env.APP_PORT ||
+    process.env.EASYPANEL_PORT ||
+    3000,
+);
 const host = "0.0.0.0";
 const clientDir = join(rootDir, "dist", "client");
 const serverDir = join(rootDir, "dist", "server");
@@ -106,6 +112,23 @@ const server = createServer(async (req, res) => {
   }
 });
 
+server.on("error", (error) => {
+  console.error("Server failed to start", error);
+  process.exit(1);
+});
+
 server.listen(port, host, () => {
-  console.log(`Server listening on http://${host}:${port}`);
+  console.log(
+    JSON.stringify({
+      message: "Server listening",
+      url: `http://${host}:${port}`,
+      port,
+      env: {
+        PORT: process.env.PORT || null,
+        NIXPACKS_PORT: process.env.NIXPACKS_PORT || null,
+        APP_PORT: process.env.APP_PORT || null,
+        EASYPANEL_PORT: process.env.EASYPANEL_PORT || null,
+      },
+    }),
+  );
 });
