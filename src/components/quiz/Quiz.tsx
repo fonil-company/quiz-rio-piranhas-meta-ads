@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Shell } from "./Shell";
 import { Answers } from "./types";
@@ -27,6 +27,13 @@ export function Quiz() {
   const showProgress = step > 0 && step <= TOTAL;
   // Back is allowed on all steps except intro (0), processing (6) and success (8).
   const canGoBack = step > 0 && step !== 6 && step !== 8;
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const hash = step === 0 ? "#inicio" : `#etapa${step}`;
+    window.history.replaceState(null, "", hash);
+  }, [step]);
 
   return (
     <Shell step={stepNumber} totalSteps={TOTAL} showProgress={showProgress} onBack={canGoBack ? back : undefined}>
