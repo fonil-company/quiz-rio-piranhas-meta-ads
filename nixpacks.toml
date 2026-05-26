@@ -4,6 +4,8 @@ nixPkgs = ["nodejs_22"]
 [variables]
 NODE_VERSION = "22"
 NIXPACKS_NODE_VERSION = "22"
+PORT = "3000"
+NIXPACKS_PORT = "3000"
 
 [phases.install]
 cmds = ["npm ci"]

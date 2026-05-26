@@ -7,13 +7,7 @@ import { fileURLToPath } from "node:url";
 import worker from "./dist/server/index.js";
 
 const rootDir = dirname(fileURLToPath(import.meta.url));
-const port = Number(
-  process.env.PORT ||
-    process.env.NIXPACKS_PORT ||
-    process.env.APP_PORT ||
-    process.env.EASYPANEL_PORT ||
-    3000,
-);
+const port = Number(process.env.PORT || process.env.NIXPACKS_PORT || 3000);
 const host = "0.0.0.0";
 const clientDir = join(rootDir, "dist", "client");
 const serverDir = join(rootDir, "dist", "server");
@@ -81,6 +75,12 @@ function getRequestBody(req) {
 
 const server = createServer(async (req, res) => {
   try {
+    if (req.url === "/health") {
+      res.writeHead(200, { "content-type": "text/plain; charset=utf-8" });
+      res.end("ok");
+      return;
+    }
+
     const url = getRequestUrl(req);
     const staticPath = getStaticPath(url);
 
@@ -126,8 +126,6 @@ server.listen(port, host, () => {
       env: {
         PORT: process.env.PORT || null,
         NIXPACKS_PORT: process.env.NIXPACKS_PORT || null,
-        APP_PORT: process.env.APP_PORT || null,
-        EASYPANEL_PORT: process.env.EASYPANEL_PORT || null,
       },
     }),
   );
