@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import logoRioPiranhas from "../assets/logo-rio-piranhas.png?url";
 
 function NotFoundComponent() {
   return (
@@ -85,6 +86,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: appCss,
+      },
+      {
+        rel: "icon",
+        type: "image/png",
+        href: logoRioPiranhas,
+      },
+      {
+        rel: "apple-touch-icon",
+        href: logoRioPiranhas,
       },
     ],
   }),
