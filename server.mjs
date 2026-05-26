@@ -7,7 +7,14 @@ import { fileURLToPath } from "node:url";
 import worker from "./dist/server/index.js";
 
 const rootDir = dirname(fileURLToPath(import.meta.url));
-const port = Number(process.env.PORT || process.env.NIXPACKS_PORT || 3000);
+const ports = [
+  process.env.PORT,
+  process.env.NIXPACKS_PORT,
+  "3000",
+  "80",
+]
+  .map(Number)
+  .filter((value, index, list) => Number.isFinite(value) && list.indexOf(value) === index);
 const host = "0.0.0.0";
 const clientDir = join(rootDir, "dist", "client");
 const serverDir = join(rootDir, "dist", "server");
@@ -63,7 +70,7 @@ function getRequestUrl(req) {
   const forwardedHost = req.headers["x-forwarded-host"];
   const requestHost = Array.isArray(forwardedHost)
     ? forwardedHost[0]
-    : forwardedHost || req.headers.host || `localhost:${port}`;
+    : forwardedHost || req.headers.host || "localhost:3000";
 
   return `${proto}://${requestHost}${req.url || "/"}`;
 }
@@ -73,7 +80,7 @@ function getRequestBody(req) {
   return Readable.toWeb(req);
 }
 
-const server = createServer(async (req, res) => {
+async function handleRequest(req, res) {
   try {
     if (req.url === "/health") {
       res.writeHead(200, { "content-type": "text/plain; charset=utf-8" });
@@ -110,23 +117,39 @@ const server = createServer(async (req, res) => {
     res.writeHead(500, { "content-type": "text/plain; charset=utf-8" });
     res.end("Internal Server Error");
   }
-});
+}
 
-server.on("error", (error) => {
-  console.error("Server failed to start", error);
-  process.exit(1);
-});
+let started = 0;
 
-server.listen(port, host, () => {
-  console.log(
-    JSON.stringify({
-      message: "Server listening",
-      url: `http://${host}:${port}`,
-      port,
-      env: {
-        PORT: process.env.PORT || null,
-        NIXPACKS_PORT: process.env.NIXPACKS_PORT || null,
-      },
-    }),
-  );
-});
+for (const port of ports) {
+  const server = createServer(handleRequest);
+
+  server.on("error", (error) => {
+    console.error(
+      JSON.stringify({
+        message: "Server failed to listen",
+        port,
+        error: error.message,
+      }),
+    );
+
+    if (started === 0 && port === ports[ports.length - 1]) {
+      process.exit(1);
+    }
+  });
+
+  server.listen(port, host, () => {
+    started += 1;
+    console.log(
+      JSON.stringify({
+        message: "Server listening",
+        url: `http://${host}:${port}`,
+        port,
+        env: {
+          PORT: process.env.PORT || null,
+          NIXPACKS_PORT: process.env.NIXPACKS_PORT || null,
+        },
+      }),
+    );
+  });
+}
