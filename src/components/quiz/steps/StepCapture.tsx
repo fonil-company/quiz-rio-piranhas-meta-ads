@@ -28,7 +28,6 @@ export function StepCapture({ answers, onSubmit, exploTag }: Props) {
   const [form, setForm] = useState({
     name: answers.name ?? "",
     whatsapp: answers.whatsapp ?? "",
-    email: answers.email ?? "",
     city: answers.city ?? "",
     state: answers.state ?? "",
   });
@@ -36,7 +35,6 @@ export function StepCapture({ answers, onSubmit, exploTag }: Props) {
   const valid =
     form.name.trim().length >= 3 &&
     form.whatsapp.replace(/\D/g, "").length >= 10 &&
-    /\S+@\S+\.\S+/.test(form.email) &&
     form.city.trim().length >= 2 &&
     form.state.length === 2;
 
@@ -45,13 +43,13 @@ export function StepCapture({ answers, onSubmit, exploTag }: Props) {
       <div className="mx-auto max-w-xl">
         <div className="text-center">
           <span className="inline-flex rounded-full bg-brand-yellow/30 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-foreground">
-            Análise pronta
+            Acesso comercial
           </span>
           <h2 className="mt-3 text-balance text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-            Sua análise está pronta
+            Receba acesso às condições comerciais disponíveis para sua região
           </h2>
           <p className="mt-2 text-[15px] text-muted-foreground">
-            Preencha seus dados para liberar seu acesso às oportunidades de maior giro disponíveis para sua região.
+            Preencha seus dados para receber o catálogo e o próximo contato pelo WhatsApp.
           </p>
         </div>
 
@@ -88,16 +86,6 @@ export function StepCapture({ answers, onSubmit, exploTag }: Props) {
               className={inputCls}
             />
           </Field>
-          <Field label="E-mail">
-            <input
-              type="email"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              placeholder="voce@empresa.com"
-              className={inputCls}
-              maxLength={160}
-            />
-          </Field>
           <div className="grid grid-cols-[1fr_110px] gap-3">
             <Field label="Cidade">
               <input
@@ -127,7 +115,7 @@ export function StepCapture({ answers, onSubmit, exploTag }: Props) {
             disabled={!valid || isSubmitting}
             className="group mt-2 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-cta px-6 py-4 text-base font-extrabold uppercase tracking-wide text-foreground shadow-cta transition-all duration-200 hover:-translate-y-0.5 hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
           >
-            {isSubmitting ? "Liberando sua análise" : "Liberar minha análise"}
+            {isSubmitting ? "Liberando acesso" : "Liberar acesso"}
             <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
           </button>
           {submitError && (
@@ -144,7 +132,7 @@ export function StepCapture({ answers, onSubmit, exploTag }: Props) {
           <ul className="mt-3 grid gap-1.5 text-sm font-medium text-foreground">
             {[
               "Catálogo atualizado",
-              "Produtos com alta procura",
+              "Produtos de maior giro",
               "Sugestões de categorias",
               "Condições comerciais",
               "Atendimento especializado",
@@ -155,7 +143,7 @@ export function StepCapture({ answers, onSubmit, exploTag }: Props) {
             ))}
           </ul>
           <div className="mt-4 grid grid-cols-2 gap-2">
-            <Pill icon={<Wallet className="h-4 w-4" />} label="Pedido inicial R$ 1.000" />
+            <Pill icon={<Wallet className="h-4 w-4" />} label="Pedido inicial R$ 800" />
             <Pill icon={<Truck className="h-4 w-4" />} label="Frete grátis MA e PI" />
           </div>
         </div>

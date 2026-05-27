@@ -8,7 +8,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Distribuidora Rio Piranhas: descubra produtos de alto giro, compre direto da distribuidora com frete grátis MA e PI. Pedido inicial a partir de R$ 1.000.",
+          "Distribuidora Rio Piranhas: descubra produtos de alto giro, compre direto da distribuidora com frete grátis MA e PI. Pedido inicial a partir de R$ 800.",
       },
       { property: "og:title", content: "Rio Piranhas — Análise gratuita" },
       {

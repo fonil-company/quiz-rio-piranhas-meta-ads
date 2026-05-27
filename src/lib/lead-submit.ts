@@ -15,18 +15,11 @@ declare global {
 
 const labels = {
   goal: {
-    renda: "Aumentar minha renda revendendo produtos",
     loja: "Comprar para abastecer minha loja",
     margem: "Encontrar produtos com maior margem",
     mix: "Ampliar meu mix de produtos",
     fornecedor: "Encontrar um fornecedor de confiança",
-  },
-  channel: {
-    fisica: "Tenho loja física",
-    online: "Tenho loja online",
-    revendo: "Revendo para clientes",
-    comecar: "Quero começar a revender",
-    estabelecimento: "Compro para meu estabelecimento",
+    distribuidora: "Comprar direto da distribuidora",
   },
   segment: {
     cosmeticos: "Loja de cosméticos",
@@ -38,8 +31,8 @@ const labels = {
     outro: "Outro",
   },
   budget: {
-    ate1k: "Até R$ 1.000",
-    "1k3k": "Entre R$ 1.000 e R$ 3.000",
+    ate800: "Até R$ 800",
+    "800a3k": "Entre R$ 800 e R$ 3.000",
     "3k10k": "Entre R$ 3.000 e R$ 10.000",
     "10k+": "Acima de R$ 10.000",
   },
@@ -106,6 +99,13 @@ function getTrackingParams(eventId: string) {
   };
 }
 
+function getCampaignOrigin() {
+  const utms = getUtmParams();
+  return [utms.utm_source, utms.utm_medium, utms.utm_campaign]
+    .filter(Boolean)
+    .join(" / ");
+}
+
 function createEventId() {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
     return crypto.randomUUID();
@@ -129,16 +129,20 @@ function buildLeadPayload(answers: Answers) {
   return {
     nomeCompleto: answers.name ?? "",
     nome: answers.name ?? "",
-    email: answers.email ?? "",
+    email: "",
     telefone: answers.whatsapp ?? "",
-    documento: answers.cnpj ?? "",
-    tipoDocumento: "cnpj",
+    documento: "",
+    tipoDocumento: "",
     estado: answers.state ?? "",
     cidade: answers.city ?? "",
     faturamento: getLabel("goal", answers.goal),
-    desempenho: getLabel("channel", answers.channel),
+    objetivo: getLabel("goal", answers.goal),
     produtos: [getLabel("segment", answers.segment)].filter(Boolean),
+    segmento: getLabel("segment", answers.segment),
     mediaFaturamento: getLabel("budget", answers.budget),
+    faixaCompra: getLabel("budget", answers.budget),
+    dataCadastro: new Date().toISOString(),
+    origemCampanha: getCampaignOrigin(),
   };
 }
 
@@ -170,15 +174,16 @@ export async function submitLeadToSheet(answers: Answers) {
       body: JSON.stringify({
         name: answers.name ?? "",
         phone: answers.whatsapp ?? "",
-        email: answers.email ?? "",
-        document: answers.cnpj ?? "",
-        document_type: "cnpj",
+        email: "",
+        document: "",
+        document_type: "",
         state: answers.state ?? "",
         city: answers.city ?? "",
+        registered_at: new Date().toISOString(),
+        campaign_origin: getCampaignOrigin(),
         ...trackingParams,
         quiz: {
           goal: getLabel("goal", answers.goal),
-          channel: getLabel("channel", answers.channel),
           segment: getLabel("segment", answers.segment),
           budget: getLabel("budget", answers.budget),
         },
