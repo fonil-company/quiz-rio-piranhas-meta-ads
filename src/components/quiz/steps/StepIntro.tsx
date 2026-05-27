@@ -6,7 +6,7 @@ const benefits = [
   "Compra direto da distribuidora",
   "Frete grátis MA e PI",
   "Atendimento especializado",
-  "Pedido inicial a partir de R$ 800",
+  "Pedido inicial a partir de R$ 1.000",
 ];
 
 export function StepIntro({ onStart, exploTag }: { onStart: () => void; exploTag?: string }) {
@@ -16,7 +16,7 @@ export function StepIntro({ onStart, exploTag }: { onStart: () => void; exploTag
         <div className="text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-brand-blue/20 bg-white/70 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-brand-blue-deep shadow-soft backdrop-blur">
             <BadgeCheck className="h-3.5 w-3.5 text-brand-blue" />
-            Distribuidora autorizada
+            Distribuidora Autorizada
           </span>
           <h1 className="mt-4 text-balance text-3xl font-extrabold leading-[1.1] tracking-tight text-foreground sm:text-5xl">
             Descubra oportunidades de{" "}
@@ -27,7 +27,8 @@ export function StepIntro({ onStart, exploTag }: { onStart: () => void; exploTag
             com produtos de alto giro
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-balance text-[15px] leading-relaxed text-muted-foreground sm:text-base">
-            Responda algumas perguntas rápidas e receba acesso às condições comerciais disponíveis para sua região.
+            Responda algumas perguntas rápidas e descubra como aumentar suas vendas
+            comprando direto da distribuidora.
           </p>
         </div>
 

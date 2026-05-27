@@ -9,11 +9,18 @@ const CONSULTANTS = {
 
 const labels = {
   goal: {
+    renda: "Aumentar minha renda revendendo produtos",
     loja: "Comprar para abastecer minha loja",
     margem: "Encontrar produtos com maior margem",
     mix: "Ampliar meu mix de produtos",
     fornecedor: "Encontrar um fornecedor de confiança",
-    distribuidora: "Comprar direto da distribuidora",
+  },
+  channel: {
+    fisica: "Tenho loja física",
+    online: "Tenho loja online",
+    revendo: "Revendo para clientes",
+    comecar: "Quero começar a revender",
+    estabelecimento: "Compro para meu estabelecimento",
   },
   segment: {
     cosmeticos: "Loja de cosméticos",
@@ -25,8 +32,8 @@ const labels = {
     outro: "Outro",
   },
   budget: {
-    ate800: "Até R$ 800",
-    "800a3k": "Entre R$ 800 e R$ 3.000",
+    ate1k: "Até R$ 1.000",
+    "1k3k": "Entre R$ 1.000 e R$ 3.000",
     "3k10k": "Entre R$ 3.000 e R$ 10.000",
     "10k+": "Acima de R$ 10.000",
   },
@@ -44,10 +51,13 @@ function buildWhatsAppLink(answers: Answers) {
     "",
     `Nome: ${answers.name || "-"}`,
     `WhatsApp: ${answers.whatsapp || "-"}`,
+    `E-mail: ${answers.email || "-"}`,
     `Cidade/UF: ${answers.city || "-"} - ${answers.state || "-"}`,
+    `CNPJ: ${answers.cnpj || "-"}`,
     "",
     "Respostas do quiz:",
     `Objetivo: ${getLabel("goal", answers.goal)}`,
+    `Canal de venda: ${getLabel("channel", answers.channel)}`,
     `Segmento: ${getLabel("segment", answers.segment)}`,
     `Investimento: ${getLabel("budget", answers.budget)}`,
   ].join("\n");
@@ -66,10 +76,11 @@ export function StepSuccess({ answers, exploTag }: { answers: Answers; exploTag?
           <CheckCircle2 className="h-10 w-10 text-white" />
         </div>
         <h2 className="mt-6 text-balance text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
-          {first ? `${first}, cadastro recebido` : "Cadastro recebido"}
+          {first ? `${first}, sua análise foi liberada!` : "Sua análise foi liberada!"}
         </h2>
         <p className="mx-auto mt-3 max-w-md text-balance text-[15px] text-muted-foreground">
-          Estamos preparando seu atendimento. Você receberá nosso catálogo geral e um consultor poderá entrar em contato pelo WhatsApp para apresentar oportunidades compatíveis com seu perfil.
+          Em instantes, um especialista comercial da Rio Piranhas entrará em contato pelo seu
+          WhatsApp com as oportunidades selecionadas para o seu perfil.
         </p>
         <a
           href={whatsappLink}
@@ -78,7 +89,7 @@ export function StepSuccess({ answers, exploTag }: { answers: Answers; exploTag?
           className="mx-auto mt-6 inline-flex items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-6 py-4 text-base font-extrabold text-white shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#1fb85a]"
         >
           <MessageCircle className="h-5 w-5" />
-          Falar pelo WhatsApp
+          Falar com consultor agora
         </a>
 
         <div className="mt-8 grid gap-3 rounded-3xl border border-border bg-white/80 p-5 text-left shadow-soft backdrop-blur sm:p-6">
@@ -86,9 +97,9 @@ export function StepSuccess({ answers, exploTag }: { answers: Answers; exploTag?
             Próximos passos
           </p>
           {[
-            { n: 1, t: "Mensagem pelo WhatsApp", d: "Você recebe a mensagem automática do nosso atendimento." },
-            { n: 2, t: "Envio do catálogo", d: "Catálogo geral atualizado com produtos de alto giro." },
-            { n: 3, t: "Continuação da análise", d: "O CNPJ será solicitado depois para verificação das condições comerciais." },
+            { n: 1, t: "Contato pelo WhatsApp", d: "Você recebe a mensagem do nosso atendimento comercial." },
+            { n: 2, t: "Envio do catálogo", d: "Catálogo atualizado com produtos de alto giro." },
+            { n: 3, t: "Condições liberadas", d: "Frete grátis MA e PI e condições para pedidos a partir de R$ 1.000." },
           ].map((s) => (
             <div key={s.n} className="flex gap-3 rounded-2xl bg-brand-blue-soft/60 p-3">
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-brand text-sm font-extrabold text-white">
