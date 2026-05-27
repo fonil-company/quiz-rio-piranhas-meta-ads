@@ -129,7 +129,7 @@ function buildLeadPayload(answers: Answers) {
   return {
     nomeCompleto: answers.name ?? "",
     nome: answers.name ?? "",
-    email: "",
+    email: answers.email ?? "",
     telefone: answers.whatsapp ?? "",
     documento: "",
     tipoDocumento: "",
@@ -174,7 +174,7 @@ export async function submitLeadToSheet(answers: Answers) {
       body: JSON.stringify({
         name: answers.name ?? "",
         phone: answers.whatsapp ?? "",
-        email: "",
+        email: answers.email ?? "",
         document: "",
         document_type: "",
         state: answers.state ?? "",

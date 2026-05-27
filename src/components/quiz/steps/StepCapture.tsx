@@ -27,6 +27,7 @@ export function StepCapture({ answers, onSubmit, exploTag }: Props) {
   const [submitError, setSubmitError] = useState("");
   const [form, setForm] = useState({
     name: answers.name ?? "",
+    email: answers.email ?? "",
     whatsapp: answers.whatsapp ?? "",
     city: answers.city ?? "",
     state: answers.state ?? "",
@@ -34,6 +35,7 @@ export function StepCapture({ answers, onSubmit, exploTag }: Props) {
 
   const valid =
     form.name.trim().length >= 3 &&
+    /\S+@\S+\.\S+/.test(form.email) &&
     form.whatsapp.replace(/\D/g, "").length >= 10 &&
     form.city.trim().length >= 2 &&
     form.state.length === 2;
@@ -75,6 +77,16 @@ export function StepCapture({ answers, onSubmit, exploTag }: Props) {
               placeholder="Seu nome"
               className={inputCls}
               maxLength={120}
+            />
+          </Field>
+          <Field label="E-mail">
+            <input
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              placeholder="voce@empresa.com"
+              className={inputCls}
+              maxLength={160}
             />
           </Field>
           <Field label="WhatsApp">
